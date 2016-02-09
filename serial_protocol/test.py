@@ -20,23 +20,34 @@ def sendDrive(ser, left, right):
     print("Incorrectly formated drive command!")
     return;
 
+  # Write OpCode
   ser.write('1')
-  #ser.write('0' if left >= 0 else '1')
-  #ser.write(struct.pack("B", abs(left) * 255))
-  #ser.write('0' if right >= 0 else '1')
-  #ser.write(struct.pack("B", abs(right) * 255))
 
-  ser.write('0')
-  ser.write(bytes(255))
-  ser.write('0')
-  ser.write(bytes(255))
+  # Write Left Motor Direction
+  if (left >= 0):
+    ser.write(bytes(0))
+  else:
+    ser.write(bytes(1))
 
-  ser.write('0')
-  ser.write('0')
-  ser.write('0')
-  ser.write('0')
+  # Write Left Motor Speed
+  ser.write(bytes(abs(left * 255)))
 
-  print('test')
+  # Write Right Motor Direction
+  if (right >= 0):
+    ser.write(bytes(0))
+  else:
+    ser.write(bytes(1))
+
+  # Write Right Motor Speed
+  ser.write(bytes(abs(right * 255)))
+
+  # Pad message to 9 bytes
+  ser.write(bytes(0))
+  ser.write(bytes(0))
+  ser.write(bytes(0))
+  ser.write(bytes(0))
+
+  print('Test')
 
 if __name__ == '__main__':
   ser = establishConnection()

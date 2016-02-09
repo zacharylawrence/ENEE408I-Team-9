@@ -21,32 +21,11 @@ void setup()
  
 void loop() 
 { 
-  if (Serial.available())
-  {
-    char key = Serial.read();
-    if (key == 'f')
-    {
-      Serial.println("forward");
-      setMotorDirection(MOTOR2, 0);
-    }
-    if (key == 'b')
-    {
-      Serial.println("backward");
-      setMotorDirection(MOTOR2, 1);
-    }
-    if (key == 'u')
-    {
-      Serial.println("speedup");
-      MOTOR2_speed += 50;
-      setMotorSpeed(MOTOR2, MOTOR2_speed);
-    }
-    if (key == 'd')
-    {
-      Serial.println("speeddown");
-      MOTOR2_speed -= 50;
-      setMotorSpeed(MOTOR2, MOTOR2_speed);
-    }
-  }
+  setMotorSpeed(MOTOR1, 80);
+  setMotorSpeed(MOTOR2, 80);
+  delay(5000);
+  setMotorSpeed(MOTOR1, 0);
+  setMotorSpeed(MOTOR2, 0);
 } 
 
 /*

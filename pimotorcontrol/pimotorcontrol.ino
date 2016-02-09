@@ -21,33 +21,36 @@ void setup()
  
 void loop() 
 { 
-  if (Serial.available())
+   if (Serial.available())
   {
-    char key = Serial.read();
-    if (key == 'f')
-    {
-      Serial.println("forward");
-      setMotorDirection(MOTOR2, 0);
+    // read 9 bytes
+    char data[9];
+    Serial.readBytes(data, 9);
+    if(data[0] != 1){
+      // error 
+      Serial.println("Header recieved was not 1");
     }
-    if (key == 'b')
-    {
-      Serial.println("backward");
-      setMotorDirection(MOTOR2, 1);
-    }
-    if (key == 'u')
-    {
-      Serial.println("speedup");
-      MOTOR2_speed += 50;
-      setMotorSpeed(MOTOR2, MOTOR2_speed);
-    }
-    if (key == 'd')
-    {
-      Serial.println("speeddown");
-      MOTOR2_speed -= 50;
-      setMotorSpeed(MOTOR2, MOTOR2_speed);
-    }
+    
+    int leftDirection = data[1]-0x30;
+    int leftSpeed = data[2]-0x30;
+    int rightDirection = data[5]-0x30;
+    int rightSpeed = data[6]-0x30;    
+    
+    setMotorDirection(MOTOR1, leftDirection);
+    setMotorSpeed(MOTOR1, leftSpeed);
+    setMotorDirection(MOTOR2, rightDirection);
+    setMotorSpeed(MOTOR2, rightSpeed);
+    
   }
+  
+  // write sensor information
+  sendPingData();
 } 
+
+void sendPingData() {
+  // read ping, send 9 bytes, header = 2
+  
+}
 
 /*
 *  Change motor direction
@@ -65,6 +68,10 @@ void setMotorDirection(int motor, int dir){
    }
 }
 
+/*
+* Change motor speed
+* value between 0 and 255
+*/
 void setMotorSpeed(int motor, int speed){
     Serial.println("setmotorspeed");
     if(speed < 0) {

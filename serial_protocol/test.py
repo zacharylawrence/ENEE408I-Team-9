@@ -1,11 +1,10 @@
 import serial
 import time
-import binascii
 import struct
 
 def establishConnection():
   # Define Constants
-  SERIAL_DEVICE = "/dev/ttyACM0"
+  SERIAL_DEVICE = "/dev/tty.usbmodem1411"
 
   # Establish Connection
   ser = serial.Serial(SERIAL_DEVICE, 9600)
@@ -20,39 +19,43 @@ def sendDrive(ser, left, right):
     print("Incorrectly formated drive command!")
     return;
 
+  message = bytearray(9)
+
   # Write OpCode
-  ser.write('1')
+  message[0] = struct.pack("B", 1)
 
   # Write Left Motor Direction
   if (left >= 0):
-    ser.write(bytes(0))
+    message[1] = struct.pack("B", 0)
   else:
-    ser.write(bytes(1))
+    message[1] = struct.pack("B", 1)
 
   # Write Left Motor Speed
-  ser.write(bytes(abs(left * 255)))
+  message[2] = struct.pack("B", 255)
 
   # Write Right Motor Direction
   if (right >= 0):
-    ser.write(bytes(0))
+    message[3] = struct.pack("B", 0)
   else:
-    ser.write(bytes(1))
+    message[3] = struct.pack("B", 1)
 
   # Write Right Motor Speed
-  ser.write(bytes(abs(right * 255)))
+  message[4] = struct.pack("B", 130)
 
-  # Pad message to 9 bytes
-  ser.write(bytes(0))
-  ser.write(bytes(0))
-  ser.write(bytes(0))
-  ser.write(bytes(0))
+  message[5] = struct.pack("B", 0)
 
-  print('Test')
+  print("Sending: " + hexDump(message))
+  ser.write(message)
+
+  print("Response: " + ser.read(3))
+
+def hexDump(dump):
+  return ":".join("{:02x}".format(c) for c in dump)
 
 if __name__ == '__main__':
   ser = establishConnection()
-  sendDrive(ser, -1.0, -1.0)
-  time.sleep(5)
+  # sendDrive(ser, -1.0, -1.0)
+  # time.sleep(5)
   sendDrive(ser, 1.0, 1.0)
-  time.sleep(5)
-  sendDrive(ser, 0.0, 0.0)
+  # time.sleep(5)
+  # sendDrive(ser, 0.0, 0.0)

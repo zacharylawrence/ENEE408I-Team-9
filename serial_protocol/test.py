@@ -31,7 +31,7 @@ def sendDrive(ser, left, right):
     message[1] = struct.pack("B", 1)
 
   # Write Left Motor Speed
-  message[2] = struct.pack("B", 255)
+  message[2] = struct.pack("B", abs(left * 255))
 
   # Write Right Motor Direction
   if (right >= 0):
@@ -40,22 +40,21 @@ def sendDrive(ser, left, right):
     message[3] = struct.pack("B", 1)
 
   # Write Right Motor Speed
-  message[4] = struct.pack("B", 130)
-
-  message[5] = struct.pack("B", 0)
+  message[4] = struct.pack("B", abs(right * 255))
 
   print("Sending: " + hexDump(message))
   ser.write(message)
 
-  print("Response: " + ser.read(3))
+  print("Response: " + ser.read(4))
 
 def hexDump(dump):
   return ":".join("{:02x}".format(c) for c in dump)
 
 if __name__ == '__main__':
   ser = establishConnection()
-  # sendDrive(ser, -1.0, -1.0)
-  # time.sleep(5)
+  sendDrive(ser, -0.5, -0.5)
+  time.sleep(5)
   sendDrive(ser, 1.0, 1.0)
-  # time.sleep(5)
-  # sendDrive(ser, 0.0, 0.0)
+  time.sleep(5)
+  sendDrive(ser, 0.25, 0.25)
+  time.sleep(5)

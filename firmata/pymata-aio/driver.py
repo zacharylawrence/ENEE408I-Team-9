@@ -15,9 +15,9 @@ class Driver():
 
   def loop(self, sc):
     print("New Loop")
-    self.arduino.blink_led()
+    # self.arduino.blink_led()
     # self.arduino.set_motors(0.25, -0.25)
-    # print("Ping: " + str(self.arduino.get_ping()))
+    print("Ping: " + str(self.arduino.get_ping()))
     # self.arduino.get_ping()
 
     # Loop again after delay
@@ -28,9 +28,9 @@ class Driver():
 
 
 if __name__ == '__main__':
-  # Wait .1 sec between loops
+  # Wait .05 sec between loops
   # This waits after the loop is run. This will not subtract the time it took to run loop() from the total wait time.
-  driver = Driver(.1)
+  driver = Driver(.05)
 
   s = sched.scheduler(time.time, driver.arduino.board.sleep)
   s.enter(0, 1, driver.loop, (s,))

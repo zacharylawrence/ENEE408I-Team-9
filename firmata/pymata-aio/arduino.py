@@ -61,8 +61,9 @@ class Arduino():
   # Get the ping sensor's distance in cm
   # TODO: Consider using callbacks?
   def get_ping(self):
-    data = self.board.sonar_data_retrieve(self._PING)
-    return None if (data == None) else data[self._PING]
+    return self.board.sonar_data_retrieve(self._PING)
+    # data = self.board.sonar_data_retrieve(self._PING)
+    # return None if (data == None) else data[self._PING]
 
   def blink_led(self):
     self.board.digital_write(13, 1)

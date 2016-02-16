@@ -55,8 +55,8 @@ class Arduino():
     self.board.digital_write(self._MOTOR2_DIR_B, 1 if (motor2 < 0) else 0)
 
     # Set motor speeds
-    self.board.digital_write(self._MOTOR1, abs(motor1) * 255)
-    self.board.digital_write(self._MOTOR2, abs(motor2) * 255)
+    self.board.analog_write(self._MOTOR1, abs(motor1) * 255)
+    self.board.analog_write(self._MOTOR2, abs(motor2) * 255)
 
   # Get the ping sensor's distance in cm
   # TODO: Consider using callbacks?

@@ -18,7 +18,7 @@ class Arduino():
   _MOTOR2_DIR_B = 8
 
   # Note: ping sensor shouldn't have to be PWM
-  _PING = 5
+  _PING = 12
 
   _LED = 13
 

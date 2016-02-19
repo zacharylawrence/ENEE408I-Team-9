@@ -15,6 +15,7 @@ class Driver():
 
   def loop(self, sc):
     print("New Loop")
+
     # self.arduino.blink_led()
     # self.arduino.set_motors(0.25, 0.25)
     print("Ping: " + str(self.arduino.get_ping()))

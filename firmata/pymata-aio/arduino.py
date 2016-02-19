@@ -38,6 +38,8 @@ class Arduino():
 
     self.board.sonar_config(self._PING, self._PING)
 
+    self.board.pixy_init()
+
     self.board.set_pin_mode(self._LED, Constants.OUTPUT)
 
   def set_motors(self, motor1, motor2):
@@ -64,6 +66,10 @@ class Arduino():
     return self.board.sonar_data_retrieve(self._PING)
     # data = self.board.sonar_data_retrieve(self._PING)
     # return None if (data == None) else data[self._PING]
+
+  # TODO: Returns the value from the pixy camera
+  def get_pixy(self):
+    return self.board.pixy_get_blocks()
 
   def blink_led(self):
     self.board.digital_write(13, 1)

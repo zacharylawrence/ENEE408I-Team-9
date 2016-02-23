@@ -9,6 +9,7 @@ from pymata_aio.constants import Constants
 
 class Arduino():
   # Define Pin Constants
+  # SPI (for pixy) uses pins 10-13
   _MOTOR1 = 3
   _MOTOR1_DIR_A = 2
   _MOTOR1_DIR_B = 4
@@ -18,7 +19,7 @@ class Arduino():
   _MOTOR2_DIR_B = 8
 
   # Note: ping sensor shouldn't have to be PWM
-  _PING = 12
+  _PING = 5
 
   _LED = 13
 
@@ -39,6 +40,7 @@ class Arduino():
     self.board.sonar_config(self._PING, self._PING)
 
     self.board.pixy_init()
+    self.board.keep_alive(period=2)
 
     self.board.set_pin_mode(self._LED, Constants.OUTPUT)
 

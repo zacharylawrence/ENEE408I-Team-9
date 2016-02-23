@@ -27,7 +27,7 @@ class Driver():
     (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
     ## print("L: " + str(left_motor) + " R: " + str(right_motor))
-    self.arduino.set_motors(left_motor, right_motor)
+    # self.arduino.set_motors(left_motor, right_motor)
 
     # Pixy:
     blocks = self.arduino.get_pixy_blocks()
@@ -42,6 +42,8 @@ class Driver():
         # Go right
         print("Go right")
         self.arduino.set_motors(0.1, -0.1)
+      else:
+        self.arduino.set_motors(0.0, -0.0)
 
     # Loop again after delay
     sc.enter(self.looprate, 1, self.loop, (sc,))

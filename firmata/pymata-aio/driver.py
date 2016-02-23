@@ -27,6 +27,7 @@ class Driver():
     (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
     print("L: " + str(left_motor) + " R: " + str(right_motor))
+    self.arduino.set_motors(left_motor, right_motor)
 
     # Loop again after delay
     sc.enter(self.looprate, 1, self.loop, (sc,))

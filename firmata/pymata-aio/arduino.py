@@ -48,8 +48,8 @@ class Arduino():
     if (motor1 < -1 or motor1 > 1 or motor2 < -1 or motor2 > 1):
       raise ValueError("set_motor called with (motor1=" + str(motor1) + ") and (motor2=" + str(motor2) + ")")
 
-    print("Setting Motor 1 to: " + str(motor1))
-    print("Setting Motor 2 to: " + str(motor2))
+    # print("Setting Motor 1 to: " + str(motor1))
+    # print("Setting Motor 2 to: " + str(motor2))
 
     # Set motor directions
     self.board.digital_write(self._MOTOR1_DIR_A, 0 if (motor1 < 0) else 1)
@@ -69,9 +69,22 @@ class Arduino():
     # data = self.board.sonar_data_retrieve(self._PING)
     # return None if (data == None) else data[self._PING]
 
-  # TODO: Returns the value from the pixy camera
-  def get_pixy(self):
-    return self.board.pixy_get_blocks()
+  # Returns the value from the pixy camera
+  def get_pixy_blocks(self):
+    blocks = self.board.pixy_get_blocks()
+
+    if len(blocks) > 0 and not "signature" in blocks[0]:
+        print("Malformed pixy block!!")
+        return None
+
+    for block_index in range(len(blocks)):
+      block = blocks[block_index]
+      print("  block {}: sig: {}  x: {} y: {} width: {} height: {}".format(
+          block_index, block["signature"], block["x"], block["y"], block["width"], block["height"]))
+
+    print("\n")
+
+    return blocks
 
   def blink_led(self):
     self.board.digital_write(13, 1)

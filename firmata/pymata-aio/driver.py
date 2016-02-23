@@ -17,17 +17,31 @@ class Driver():
     self.looprate = looprate
 
   def loop(self, sc):
-    print("New Loop")
+    # print("New Loop")
 
     # self.arduino.blink_led()
     # self.arduino.set_motors(0.25, 0.25)
-    print("Ping: " + str(self.arduino.get_ping()))
+    ## print("Ping: " + str(self.arduino.get_ping()))
     # self.arduino.get_ping()
 
     (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
-    print("L: " + str(left_motor) + " R: " + str(right_motor))
+    ## print("L: " + str(left_motor) + " R: " + str(right_motor))
     self.arduino.set_motors(left_motor, right_motor)
+
+    # Pixy:
+    blocks = self.arduino.get_pixy_blocks()
+    if (len(blocks) >= 1):
+      block = blocks[0]
+      print("x:" + str(block["x"]))
+      if (block["x"] < 100):
+        # Go left
+        print("Go left")
+        self.arduino.set_motors(-0.1, 0.1)
+      elif(block["x"] > 200):
+        # Go right
+        print("Go right")
+        self.arduino.set_motors(0.1, -0.1)
 
     # Loop again after delay
     sc.enter(self.looprate, 1, self.loop, (sc,))
@@ -41,6 +55,7 @@ if __name__ == '__main__':
   # Wait .05 sec between loops
   # This waits after the loop is run. This will not subtract the time it took to run loop() from the total wait time.
   driver = Driver(.05)
+  # driver = Driver(.5)
 
   # Graceful shutdown on ctrl-c
   signal.signal(signal.SIGINT, driver.shutdown)

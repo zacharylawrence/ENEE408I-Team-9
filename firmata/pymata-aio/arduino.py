@@ -66,8 +66,6 @@ class Arduino():
   # TODO: Consider using callbacks?
   def get_ping(self):
     return self.board.sonar_data_retrieve(self._PING)
-    # data = self.board.sonar_data_retrieve(self._PING)
-    # return None if (data == None) else data[self._PING]
 
   # Returns the value from the pixy camera
   def get_pixy_blocks(self):

@@ -6,9 +6,11 @@ Drive the Robot
 
 import sched, time
 import signal, sys
+from enum import Enum
 from arduino import Arduino
 from navigation import Navigation
 
+Mode = Enum('locate', 'orient', 'approach')
 
 class Driver():
   # Wait .05 sec between loops
@@ -20,6 +22,7 @@ class Driver():
     self.looprate = looprate
     # Variables updated from webserver:
     self.stop = False
+    self.mode = Mode.locate
 
   def start(self):
     self.stop = False

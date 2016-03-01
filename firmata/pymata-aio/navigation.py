@@ -11,6 +11,20 @@ class Navigation():
     # TODO
     return None
 
+  # Gets the pixy block with the largest size in the frame
+  def get_pixy_block(self, pixy_blocks):
+    max_block_index = 0
+    max_block_size = blocks[0]["width"] * blocks[0]["height"]
+
+    for block_index in range(len(blocks)):
+      block = blocks[block_index]
+      size = block["width"] * block["height"]
+      if (size > max_block_size):
+        max_block_size = size
+        max_block_index = block_index
+
+    return pixy_blocks[max_block_index]
+
   def with_pixy(self, pixy_blocks):
     if (len(pixy_blocks) >= 1):
       block = pixy_blocks[0]

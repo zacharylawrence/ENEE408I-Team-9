@@ -23,7 +23,7 @@ void loop()
 { 
   setMotorSpeed(MOTOR1, 80);
   setMotorSpeed(MOTOR2, 80);
-  delay(5000);
+  delay(5);
   setMotorSpeed(MOTOR1, 0);
   setMotorSpeed(MOTOR2, 0);
 } 
@@ -39,8 +39,8 @@ void setMotorDirection(int motor, int dir){
      digitalWrite(MOTOR1_DIR_B, dir);
    }
    else {
-     digitalWrite(MOTOR2_DIR_A, !dir);
-     digitalWrite(MOTOR2_DIR_B, dir);
+     digitalWrite(MOTOR2_DIR_A, dir);
+     digitalWrite(MOTOR2_DIR_B, !dir);
    }
 }
 

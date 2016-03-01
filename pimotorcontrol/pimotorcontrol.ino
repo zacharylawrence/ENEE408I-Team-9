@@ -29,17 +29,13 @@ void loop()
     if(data[0] != 1){
       // error 
       Serial.println("Header recieved was not 1");
-    }
+    }    
     
-    int leftDirection = data[1]-0x30;
-    int leftSpeed = data[2]-0x30;
-    int rightDirection = data[5]-0x30;
-    int rightSpeed = data[6]-0x30;    
-    
-    setMotorDirection(MOTOR1, leftDirection);
-    setMotorSpeed(MOTOR1, leftSpeed);
-    setMotorDirection(MOTOR2, rightDirection);
-    setMotorSpeed(MOTOR2, rightSpeed);
+    //setMotorSpeed(MOTOR2, 50);
+    //setMotorDirection(MOTOR1, data[1]);
+    //setMotorSpeed(MOTOR1, data[2]);
+    //setMotorDirection(MOTOR2, data[3]);
+    setMotorSpeed(MOTOR2, data[4]);
     
   }
   

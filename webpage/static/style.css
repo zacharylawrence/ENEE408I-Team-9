@@ -1,0 +1,100 @@
+html {
+    margin: 0;
+    padding: 0;
+    background-color: #grey;
+    overflow: hidden;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.contents {
+    padding: 0 12%;
+    position: absolute;
+    top: 0;
+    bottom: 105px;
+    width: 76%;
+    overflow-y: scroll;
+}
+
+.modal .control {
+    background-color: #4a1457;
+}
+
+.modal .control * {
+    color: #ffffff;
+}
+
+.modal, .cover {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.control {
+    width: 100%;
+    max-width: 740px;
+    position: absolute;
+    bottom: 45px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.fade {
+    height: 45px;
+    width: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+    position: absolute;
+    bottom: 105px;
+    pointer-events: none;
+}
+
+@media screen and (min-width: 744px) {
+    .control {
+        border-radius: 3px;
+    }
+}
+
+body > .control {
+    background-color: rgba(255, 255, 255, 0.65);
+}
+
+body > .control * {
+    width: 185px;
+    display: table-cell;
+    vertical-align: middle;
+    color: #4a1457;
+    border-color: #4a1457;
+}
+
+.control a {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+a:hover {
+    text-decoration: none;
+    opacity: .65;
+}
+
+p {
+    color: #000000;
+    font-size: 32px;
+    margin: 45px 0;
+}
+
+p a {
+    border-bottom: solid 1px;
+    margin-bottom: 1px;
+}

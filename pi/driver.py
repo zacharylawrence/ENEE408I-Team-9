@@ -10,7 +10,7 @@ from enum import Enum
 from arduino import Arduino
 from navigation import Navigation
 
-Mode = Enum('locate', 'orient', 'approach')
+#Mode = Enum('locate', 'orient', 'approach')
 
 class Driver():
   # Wait .05 sec between loops
@@ -22,7 +22,7 @@ class Driver():
     self.looprate = looprate
     # Variables updated from webserver:
     self.stop = False
-    self.mode = Mode.locate
+    #self.mode = Mode.locate
 
   def start(self):
     self.stop = False
@@ -38,10 +38,10 @@ class Driver():
     # print("New Loop")
 
     # Ping:
-    (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
+    # (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
     # Pixy:
-    # (left_motor, right_motor) = self.navigation.with_pixy(self.arduino.get_pixy_blocks())
+    (left_motor, right_motor) = self.navigation.with_pixy(self.arduino.get_pixy_blocks())
 
     print("L: " + str(left_motor) + " R: " + str(right_motor))
     self.arduino.set_motors(left_motor, right_motor)

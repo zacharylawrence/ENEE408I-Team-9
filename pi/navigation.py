@@ -15,10 +15,10 @@ class Navigation():
       return None
 
     max_block_index = 0
-    max_block_size = blocks[0]["width"] * blocks[0]["height"]
+    max_block_size = pixy_blocks[0]["width"] * pixy_blocks[0]["height"]
 
-    for block_index in range(len(blocks)):
-      block = blocks[block_index]
+    for block_index in range(len(pixy_blocks)):
+      block = pixy_blocks[block_index]
       size = block["width"] * block["height"]
       if (size > max_block_size):
         max_block_index = block_index
@@ -35,12 +35,12 @@ class Navigation():
     print("x:" + str(block["x"]))
     if (block["x"] < 100):
       print("Go left")
-      return(-0.1, 0.1)
+      return(-0.25, 0.25)
     elif(block["x"] > 200):
       print("Go right")
-      return(0.1, -0.1)
+      return(0.25, -0.25)
     else:
-      return(0.0, 0.0)
+      return(-0.25, -0.25)
 
   # Return left/right motor speeds
   def hold_ping(self, distance):

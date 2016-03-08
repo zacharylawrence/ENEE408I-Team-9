@@ -41,7 +41,7 @@ class Driver():
     # (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
     # Pixy:
-    (left_motor, right_motor) = self.navigation.with_pixy(self.arduino.get_pixy_blocks())
+    (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
 
     print("L: " + str(left_motor) + " R: " + str(right_motor))
     self.arduino.set_motors(left_motor, right_motor)

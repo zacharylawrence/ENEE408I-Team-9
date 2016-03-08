@@ -27,7 +27,7 @@ class Navigation():
       return(-0.25, -0.25)
 
   def with_pixy_average(self, pixy_blocks):
-    block_x = self.pixy.get_pixy_block_average(pixy_blocks)
+    block_x = self.pixy.get_pixy_block_x_average(pixy_blocks)
     if (block_x == None):
       print("Could not get pixy data")
       return (0.0, 0.0)
@@ -40,6 +40,7 @@ class Navigation():
       print("Go right")
       return(0.25, -0.25)
     else:
+      print("Go forward")
       return(-0.25, -0.25)
 
   # Return left/right motor speeds

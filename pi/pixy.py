@@ -28,7 +28,7 @@ class Pixy():
 
     return pixy_blocks[max_block_index]
 
-  def get_pixy_block_average(self, pixy_blocks):
+  def get_pixy_block_x_average(self, pixy_blocks):
     self.blocks_queue.append(self.get_pixy_block(pixy_blocks))  # add our new block
     if (len(self.blocks_queue) > self.max_queue_size):
       self.blocks_queue.popleft()  # remove our old block

@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+# encoding: utf-8
+"""
+Start the Robot and Webserver
+"""
+
+from threading import Thread
+from collections import deque
+from flask import Flask
+import signal, sys
+import asyncio
+
+from driver import Driver
+
+app = Flask(__name__)
+q = deque()
+
+def robot_thread(event_kill):
+  asyncio.set_event_loop(asyncio.new_event_loop())
+
+  driver = Driver(webserver_queue=q)
+  driver.start()
+
+@app.route("/")
+def hello():
+  q.append("print")
+  return "Hello World!"
+
+@app.route("/stop")
+def stop():
+  q.append("stop")
+
+@app.route("/start")
+def start():
+  q.append("start")
+
+def shutdown(signal=None, frame=None):
+  q.append("stop")
+  sys.exit(0)
+
+if __name__ == "__main__":
+  thread = Thread(target = robot_thread, args = (10, ))
+  thread.start()
+
+  signal.signal(signal.SIGINT, shutdown)
+
+  app.run(host='0.0.0.0')

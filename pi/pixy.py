@@ -7,7 +7,7 @@ Control Pixy Features
 from collections import deque
 
 class Pixy():
-  def __init__(self, max_queue_size=7):
+  def __init__(self, max_queue_size=3):
     self.max_queue_size = max_queue_size
     self.blocks_queue = deque()
 

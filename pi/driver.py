@@ -7,6 +7,7 @@ Drive the Robot
 import sched, time
 import signal, sys
 from enum import Enum
+
 from arduino import Arduino
 from navigation import Navigation
 
@@ -15,13 +16,13 @@ from navigation import Navigation
 class Driver():
   # Wait .05 sec between loops
   # This waits after the loop is run. This will not subtract the time it took to run loop() from the total wait time.
-  def __init__(self, looprate=0.05):
+  def __init__(self, webserver_queue=None, looprate=0.05):
     self.arduino = Arduino()
     self.navigation = Navigation()
     # Define constants
     self.looprate = looprate
     # Variables updated from webserver:
-    self.stop = False
+    self.webserver_queue = webserver_queue
     #self.mode = Mode.locate
 
   def start(self):
@@ -31,21 +32,28 @@ class Driver():
     s.enter(0, 1, self.loop, (s,))
     s.run()
 
-  def stop(self):
+  def stop_on_next_loop(self):
     self.stop = True
 
   def loop(self, sc):
-    # print("New Loop")
+    # Read webserver queue for new messages
+    while(len(self.webserver_queue) > 0):
+      self.process_message(self.webserver_queue.popleft())
+
+    # If stopped, just loop
+    if (self.stop):
+      sc.enter(self.looprate, 1, self.loop, (sc,))
+      return
 
     # Ping:
     # (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
     # Pixy:
-    (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
+    (left_motor, right_motor) = self.navigation.with_pixy(self.arduino.get_pixy_blocks())
 
     print("L: " + str(left_motor) + " R: " + str(right_motor))
     self.arduino.set_motors(left_motor, right_motor)
-
+    print("\n")
 
     # Loop again after delay
     if (self.stop):
@@ -53,9 +61,17 @@ class Driver():
     else:
       sc.enter(self.looprate, 1, self.loop, (sc,))
 
-  def shutdown(self, signal, frame):
+  def process_message(self, message):
+    if (message == "stop"):
+      self.stop_on_next_loop()
+    elif (message == "start"):
+      self.start()
+    elif (message == "print"):
+      print("Print!")
+
+
+  def shutdown(self, signal=None, frame=None):
     self.arduino.shutdown()
-    sys.exit(0)
 
 
 if __name__ == '__main__':

@@ -75,12 +75,12 @@ class Arduino():
         print("Malformed pixy block!!")
         return None
 
-    for block_index in range(len(blocks)):
-      block = blocks[block_index]
+    # for block_index in range(len(blocks)):
+      # block = blocks[block_index]
       # print("  block {}: sig: {}  x: {} y: {} width: {} height: {}".format(
           # block_index, block["signature"], block["x"], block["y"], block["width"], block["height"]))
 
-    print("\n")
+    # print("\n")
 
     return blocks
 

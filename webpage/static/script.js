@@ -2,11 +2,11 @@ $(document).ready(function(){
 
 	function hit_endpoint(endpoint){
 		//alert("hitting endpoint " + endpoint);
-		$("#text_area").text(endpoint);
-		url = "http://192.168.1.1/" + endpoint;
-	    $.ajax({url: url, 
-	        type:"GET",                    
-	        success: function(data) { alert("succsess") }
+		url = "http://192.168.1.1:5000/" + endpoint;
+	  $("#text_area").text(url);
+      $.ajax({url: url,
+	        type:"GET",
+	        // error: function(data) { alert(url) }
 	    });
 	}
 
@@ -88,12 +88,12 @@ $(document).ready(function(){
 	$('html').keyup(function(e){
        switch(e.which) {
         case 37: // left
-        	$("#left").removeClass('active');        	
+        	$("#left").removeClass('active');
         	$("#left").mouseup();
         break;
 
         case 39: // right
-        	$("#right").removeClass('active');       	
+        	$("#right").removeClass('active');
         	$("#right").mouseup();
         break;
 

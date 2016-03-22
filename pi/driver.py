@@ -104,6 +104,10 @@ class Driver():
       self.mode = "manual"
 
     # Manual Directions
+    elif (message == "manual_forward"):
+      self.manual_direction = "forward"
+    elif (message == "manual_backward"):
+      self.manual_direction = "backward"
     elif (message == "manual_right"):
       self.manual_direction = "right"
     elif (message == "manual_left"):

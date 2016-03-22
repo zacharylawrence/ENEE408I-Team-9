@@ -21,7 +21,7 @@ class Arduino():
   # Note: ping sensor shouldn't have to be PWM
   _PING = 5
 
-  _LED = 13
+  _SERVO = 9
 
 
   def __init__(self):
@@ -42,7 +42,7 @@ class Arduino():
     self.board.pixy_init()
     self.board.keep_alive(period=2)
 
-    self.board.set_pin_mode(self._LED, Constants.OUTPUT)
+    self.board.servo_config(self._SERVO)
 
   def set_motors(self, motor1, motor2):
     if (motor1 < -1 or motor1 > 1 or motor2 < -1 or motor2 > 1):
@@ -62,6 +62,9 @@ class Arduino():
     self.board.analog_write(self._MOTOR1, int(abs(motor1) * 255))
     self.board.analog_write(self._MOTOR2, int(abs(motor2) * 255))
 
+  def set_servo(self, servo):
+    self.board.analog_write(self._SERVO, servo)
+
   # Get the ping sensor's distance in cm
   # TODO: Consider using callbacks?
   def get_ping(self):
@@ -75,24 +78,14 @@ class Arduino():
         print("Malformed pixy block!!")
         return None
 
-    for block_index in range(len(blocks)):
-      block = blocks[block_index]
-      print("  block {}: sig: {}  x: {} y: {} width: {} height: {}".format(
-          block_index, block["signature"], block["x"], block["y"], block["width"], block["height"]))
+    # for block_index in range(len(blocks)):
+      # block = blocks[block_index]
+      # print("  block {}: sig: {}  x: {} y: {} width: {} height: {}".format(
+          # block_index, block["signature"], block["x"], block["y"], block["width"], block["height"]))
 
-    print("\n")
+    # print("\n")
 
     return blocks
-
-  def blink_led(self):
-    self.board.digital_write(13, 1)
-    self.board.sleep(2)
-    self.board.digital_write(13, 0)
-    self.board.sleep(2)
-    self.board.digital_write(13, 1)
-    self.board.sleep(2)
-    self.board.digital_write(13, 0)
-    self.board.sleep(2)
 
   def shutdown(self):
     # Reset the board and exit

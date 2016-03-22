@@ -34,6 +34,28 @@ def stop():
 def start():
   q.append("start")
 
+# Modes
+@app.route("/mode/auto")
+def auto():
+  q.append("auto")
+
+@app.route("/mode/manual")
+def manual():
+  q.append("manual")
+
+# Manual Directions
+@app.route("/manual/right")
+def manual_right():
+  q.append("manual_right")
+
+@app.route("/manual/left")
+def manual_left():
+  q.append("manual_left")
+
+@app.route("/manual/stop")
+def manual_stop():
+  q.append("manual_stop")
+
 def shutdown(signal=None, frame=None):
   q.append("stop")
   sys.exit(0)

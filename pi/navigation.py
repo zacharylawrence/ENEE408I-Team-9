@@ -19,12 +19,12 @@ class Navigation():
     print("x:" + str(block["x"]))
     if (block["x"] < 100):
       print("Go left")
-      return(-0.25, 0.25)
+      return (-0.25, 0.25)
     elif(block["x"] > 200):
       print("Go right")
-      return(0.25, -0.25)
+      return (0.25, -0.25)
     else:
-      return(0.25, 0.25)
+      return (0.25, 0.25)
 
   def with_pixy_average(self, pixy_blocks):
     block_x = self.pixy.get_pixy_block_x_average(pixy_blocks)
@@ -35,13 +35,34 @@ class Navigation():
     print("x:" + str(block_x))
     if (block_x < 100):
       print("Go left")
-      return(-0.2, 0.2)
+      return (-0.2, 0.2)
     elif(block_x > 200):
       print("Go right")
-      return(0.2, -0.2)
+      return (0.2, -0.2)
     else:
       print("Go forward")
-      return(0.2, 0.2)
+      return (0.2, 0.2)
+
+  def with_pixy_average_and_ping(self, pixy_blocks, ping):
+    block_x = self.pixy.get_pixy_block_x_average(pixy_blocks)
+    if (block_x == None):
+      print("Could not get pixy data")
+      return (0.0, 0.0)
+
+    print("x:" + str(block_x))
+    if (block_x < 100):
+      print("Go left")
+      return (-0.2, 0.2)
+    elif(block_x > 200):
+      print("Go right")
+      return (0.2, -0.2)
+    else:
+      if (ping >= 20 or ping == 0):
+        print("Go forward")
+        return (0.2, 0.2)
+      else:
+        print("Found cone")
+        return (0.0, 0.0)
 
   # Return left/right motor speeds
   def hold_ping(self, distance):

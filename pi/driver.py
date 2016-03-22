@@ -24,6 +24,8 @@ class Driver():
     # Variables updated from webserver:
     self.webserver_queue = webserver_queue
     #self.mode = Mode.locate
+    self.mode = "auto"
+    self.manual_direction = "stop"
 
   def start(self):
     self.stop = False
@@ -45,17 +47,36 @@ class Driver():
       sc.enter(self.looprate, 1, self.loop, (sc,))
       return
 
-    # Ping:
-    # (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
+    if (self.mode == "auto"):
+      # Ping:
+      # (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
-    # Pixy:
-    (left_motor, right_motor) = self.navigation.with_pixy(self.arduino.get_pixy_blocks())
+      # Pixy:
+      # (left_motor, right_motor) = self.navigation.with_pixy(self.arduino.get_pixy_blocks())
 
-    print("L: " + str(left_motor) + " R: " + str(right_motor))
-    self.arduino.set_motors(left_motor, right_motor)
-    print("\n")
+      # print("L: " + str(left_motor) + " R: " + str(right_motor))
+      # self.arduino.set_motors(left_motor, right_motor)
+      # print("\n")
 
-    # self.arduino.set_servo(250)
+      # Pixy + Ping:
+      print("ping: " + str(self.arduino.get_ping()))
+      # (left_motor, right_motor) = self.navigation.with_pixy_average_and_ping(self.arduino.get_pixy_blocks(), self.arduino.get_ping())
+      # print("L: " + str(left_motor) + " R: " + str(right_motor))
+      # self.arduino.set_motors(left_motor, right_motor)
+      # self.arduino.set_servo(servo)
+      print("\n")
+
+    elif (self.mode == "manual"):
+      # print("In manual mode")
+      if (self.manual_direction == "stop"):
+        (left_motor, right_motor) = (0.0, 0.0)
+      elif (self.manual_direction == "right"):
+        (left_motor, right_motor) = (0.2, 0.0)
+      elif (self.manual_direction == "left"):
+        (left_motor, right_motor) = (0.0, 0.2)
+
+      print("L: " + str(left_motor) + " R: " + str(right_motor))
+
 
     # Loop again after delay
     if (self.stop):
@@ -70,6 +91,20 @@ class Driver():
       self.start()
     elif (message == "print"):
       print("Print!")
+
+    # Modes
+    elif (message == "auto"):
+      self.mode = "auto"
+    elif (message == "manual"):
+      self.mode = "manual"
+
+    # Manual Directions
+    elif (message == "manual_right"):
+      self.manual_direction = "right"
+    elif (message == "manual_left"):
+      self.manual_direction = "left"
+    elif (message == "manual_stop"):
+      self.manual_direction = "stop"
 
 
   def shutdown(self, signal=None, frame=None):

@@ -37,7 +37,7 @@ class Driver():
 
   def loop(self, sc):
     # Read webserver queue for new messages
-    while(len(self.webserver_queue) > 0):
+    while((self.webserver_queue != None) and (len(self.webserver_queue) > 0)):
       self.process_message(self.webserver_queue.popleft())
 
     # If stopped, just loop
@@ -54,6 +54,8 @@ class Driver():
     print("L: " + str(left_motor) + " R: " + str(right_motor))
     self.arduino.set_motors(left_motor, right_motor)
     print("\n")
+
+    # self.arduino.set_servo(250)
 
     # Loop again after delay
     if (self.stop):

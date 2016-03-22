@@ -44,6 +44,14 @@ def manual():
   q.append("manual")
 
 # Manual Directions
+@app.route("/manual/forward")
+def manual_forward():
+  q.append("manual_forward")
+
+@app.route("/manual/backward")
+def manual_backward():
+  q.append("manual_backward")
+
 @app.route("/manual/right")
 def manual_right():
   q.append("manual_right")

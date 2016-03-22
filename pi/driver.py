@@ -70,12 +70,17 @@ class Driver():
       # print("In manual mode")
       if (self.manual_direction == "stop"):
         (left_motor, right_motor) = (0.0, 0.0)
+      elif (self.manual_direction == "forward"):
+        (left_motor, right_motor) = (0.2, 0.2)
+      elif (self.manual_direction == "backward"):
+        (left_motor, right_motor) = (-0.2, -0.2)
       elif (self.manual_direction == "right"):
         (left_motor, right_motor) = (0.2, 0.0)
       elif (self.manual_direction == "left"):
         (left_motor, right_motor) = (0.0, 0.2)
 
       print("L: " + str(left_motor) + " R: " + str(right_motor))
+      self.arduino.set_motors(left_motor, right_motor)
 
 
     # Loop again after delay

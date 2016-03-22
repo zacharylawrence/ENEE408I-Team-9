@@ -1,0 +1,107 @@
+button {
+  position: absolute;
+  display: inline-block;
+  margin: 0 10px 10px 0;
+  padding: 15px;
+  font-size: 24px;
+  font-family: "Bitter",serif;
+  line-height: 1.8;
+  vertical-align: bottom;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+button:focus {
+  outline: none
+}
+button {
+  color: #fff;
+  background-color: #6496c8;
+  border: none;
+}
+button:active, button.active {
+  background-color: #27496d;
+}
+
+.e_stop button {
+  left: 50px; 
+  top: 400px;
+  font-size: 48px;
+  height: 150px;  
+  background-color: #ff3333;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+
+.e_stop button:hover, .e_stop button.hover {
+  background-color: #c60000;
+}
+.e_stop button:active, .e_stop button.active {
+  background-color: #990000;
+}
+
+.control button {
+  background-color: #ffa31a;
+  width: 200px;
+}
+
+.control button:hover, .e_stop button.hover {
+  background-color: #e68a00;
+}
+.control button:active, .e_stop button.active {
+  background-color: #b36b00;
+}
+
+.direction button {
+  width: 100px;  
+  height: 55px;
+}
+
+.left button {  
+  margin: -27px;
+  left: 0; 
+  top: 50%;
+}
+.right button {  
+  margin: -27px;
+  right: 0; 
+  top: 50%;
+}
+.up button {  
+  margin: 0 -50px;
+  left: 50%;
+  top: 0;
+}
+.down button {  
+  margin: 0 -50px;
+  left: 50%; 
+  bottom: 0;
+}
+
+@media all and (max-width: 960px) { 
+  button {
+    font-size: 30px
+  }
+}
+@media all and (max-width: 720px) { 
+  button {
+    font-size: 20px;
+    padding: 10px 30px;
+  }
+}
+@media all and (max-width: 540px) { 
+  section {
+    text-align: center
+  }
+  button {
+    margin: 0 10px 20px 10px;
+    font-size: 16px;
+  }
+}

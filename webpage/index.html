@@ -2,16 +2,42 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href='http://fonts.googleapis.com/css?family=Bitter:400,700' rel='stylesheet' type='text/css'>
         <link rel='stylesheet' href='static/style.css'>
+        <link rel='stylesheet' href='static/button.css'>
+        <script src='static/jquery-1.11.3.js'></script>
+        <script src='static/script.js'></script>
     </head>
     <body>
-        <div class='cover'></div>
-        <div class='navigation'>
-            <a href='#' value='endpoint/control.html'>Control</a>
-            <a href='#' value='endpoint/control.html'>Control</a>
-            <a href='#' value='endpoint/control.html'>Control</a>
+        <div class="panel">
+            <section class="e_stop">
+                <button id="stop">STOP</button>
+            </section>
+            <div class="direction">
+                <section class="left">
+                    <button id="left">left</button>
+                </section>
+                <section class="right">
+                    <button id="right">right</button>
+                </section>
+                <section class="up">
+                    <button id="up">up</button>
+                </section>
+                <section class="down">
+                    <button id="down">down</button>
+                </section>
+            </div>
+            <div class="control">
+                <button id="mode_auto">Auto Mode</button>
+                <button id="mode_manual" style="top: 100px;">Manual Mode</button>
+                <button style="top: 200px;">control</button>
+                <button style="top: 300px;">control</button>
+                <button style="top: 400px;">control</button>
+            </div>
+            <textarea id="text_area" rows="4" cols="20">
+             
+            </textarea>
         </div>
     </body>
-    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
-    <script src='static/script.js'></script>
 </html>
+    

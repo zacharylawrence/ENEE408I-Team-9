@@ -71,6 +71,7 @@ class Driver():
       if (ping != None):
         if (ping != 0 and ping <= 5):
           self.arduino.close_claw()
+          self.arduino.board.sleep(2)
           left_motor = -0.2
           right_motor = -0.2
         else:

@@ -32,6 +32,9 @@ class Navigation():
       print("Could not get pixy data")
       return (0.0, 0.0)
 
+    left_speed = 0.2
+    right_speed = 0.2
+
     print("x:" + str(block_x))
     if (block_x < 100):
       print("Go left")

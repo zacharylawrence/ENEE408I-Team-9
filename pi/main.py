@@ -64,6 +64,11 @@ def manual_left():
 def manual_stop():
   q.append("manual_stop")
 
+# @app.route("/manual/servo")
+# def manual_servo():
+#   val = requests.args.get(val)
+#   q.append("manual")
+
 def shutdown(signal=None, frame=None):
   q.append("stop")
   sys.exit(0)

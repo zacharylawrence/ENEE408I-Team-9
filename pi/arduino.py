@@ -65,8 +65,13 @@ class Arduino():
   def set_servo(self, servo):
     self.board.analog_write(self._SERVO, servo)
 
+  def close_claw(self):
+    self.board.analog_write(self._SERVO, 50)
+
+  def open_claw(self):
+    self.board.analog_write(self._SERVO, 150)
+
   # Get the ping sensor's distance in cm
-  # TODO: Consider using callbacks?
   def get_ping(self):
     return self.board.sonar_data_retrieve(self._PING)
 

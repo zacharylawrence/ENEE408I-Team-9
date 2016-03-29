@@ -59,12 +59,26 @@ class Driver():
       # print("\n")
 
       # Pixy + Ping:
-      print("ping: " + str(self.arduino.get_ping()))
+      # print("ping: " + str(self.arduino.get_ping()))
       # (left_motor, right_motor) = self.navigation.with_pixy_average_and_ping(self.arduino.get_pixy_blocks(), self.arduino.get_ping())
       # print("L: " + str(left_motor) + " R: " + str(right_motor))
       # self.arduino.set_motors(left_motor, right_motor)
       # self.arduino.set_servo(servo)
-      print("\n")
+
+      (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
+
+      ping = self.arduino.get_ping()
+      if (ping != None):
+        if (ping != 0 and ping <= 5):
+          self.arduino.close_claw()
+          left_motor = -0.2
+          right_motor = -0.2
+        else:
+          self.arduino.open_claw()
+      # print(ping)
+
+      print("L: " + str(left_motor) + " R: " + str(right_motor))
+      self.arduino.set_motors(left_motor, right_motor)
 
     elif (self.mode == "manual"):
       # print("In manual mode")

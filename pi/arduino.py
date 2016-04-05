@@ -23,6 +23,8 @@ class Arduino():
 
   _SERVO = 9
 
+  _IR = 0
+
 
   def __init__(self):
     # Instantiate the pymata_core API
@@ -36,6 +38,9 @@ class Arduino():
     self.board.set_pin_mode(self._MOTOR2, Constants.PWM)
     self.board.set_pin_mode(self._MOTOR2_DIR_A, Constants.OUTPUT)
     self.board.set_pin_mode(self._MOTOR2_DIR_B, Constants.OUTPUT)
+
+    self.board.set_pin_mode(self._IR, Constants.INPUT)
+    self.board.enable_analog_reporting(self._IR)
 
     self.board.sonar_config(self._PING, self._PING)
 
@@ -91,6 +96,9 @@ class Arduino():
     # print("\n")
 
     return blocks
+
+  def getA0(self):
+    print(self.board.analog_read(0))
 
   def shutdown(self):
     # Reset the board and exit

@@ -65,40 +65,42 @@ class Driver():
       # self.arduino.set_motors(left_motor, right_motor)
       # self.arduino.set_servo(servo)
 
-      (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
+      self.arduino.getA0()
 
-      ping = self.arduino.get_ping()
-      if (ping != None):
-        if (ping != 0 and ping <= 5):
-          self.arduino.close_claw()
-          self.arduino.board.sleep(2)
-          left_motor = -0.2
-          right_motor = -0.2
-        else:
-          self.arduino.open_claw()
-      # print(ping)
+    #   (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
 
-      print("L: " + str(left_motor) + " R: " + str(right_motor))
-      self.arduino.set_motors(left_motor, right_motor)
+    #   ping = self.arduino.get_ping()
+    #   if (ping != None):
+    #     if (ping != 0 and ping <= 5):
+    #       self.arduino.close_claw()
+    #       self.arduino.board.sleep(2)
+    #       left_motor = -0.2
+    #       right_motor = -0.2
+    #     else:
+    #       self.arduino.open_claw()
+    #   # print(ping)
 
-    elif (self.mode == "manual"):
-      # print("In manual mode")
-      if (self.manual_direction == "stop"):
-        (left_motor, right_motor) = (0.0, 0.0)
-      elif (self.manual_direction == "forward"):
-        (left_motor, right_motor) = (0.2, 0.2)
-      elif (self.manual_direction == "backward"):
-        (left_motor, right_motor) = (-0.2, -0.2)
-      elif (self.manual_direction == "right"):
-        (left_motor, right_motor) = (0.2, 0.0)
-      elif (self.manual_direction == "left"):
-        (left_motor, right_motor) = (0.0, 0.2)
+    #   print("L: " + str(left_motor) + " R: " + str(right_motor))
+    #   self.arduino.set_motors(left_motor, right_motor)
 
-      print("L: " + str(left_motor) + " R: " + str(right_motor))
-      self.arduino.set_motors(left_motor, right_motor)
+    # elif (self.mode == "manual"):
+    #   # print("In manual mode")
+    #   if (self.manual_direction == "stop"):
+    #     (left_motor, right_motor) = (0.0, 0.0)
+    #   elif (self.manual_direction == "forward"):
+    #     (left_motor, right_motor) = (0.2, 0.2)
+    #   elif (self.manual_direction == "backward"):
+    #     (left_motor, right_motor) = (-0.2, -0.2)
+    #   elif (self.manual_direction == "right"):
+    #     (left_motor, right_motor) = (0.2, 0.0)
+    #   elif (self.manual_direction == "left"):
+    #     (left_motor, right_motor) = (0.0, 0.2)
+
+    #   print("L: " + str(left_motor) + " R: " + str(right_motor))
+    #   self.arduino.set_motors(left_motor, right_motor)
 
 
-    # Loop again after delay
+    # # Loop again after delay
     if (self.stop):
       self.shutdown()
     else:

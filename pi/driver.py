@@ -6,26 +6,40 @@ Drive the Robot
 
 import sched, time
 import signal, sys
+import time
 from enum import Enum
 
+import constants
 from arduino import Arduino
 from navigation import Navigation
 
-#Mode = Enum('locate', 'orient', 'approach')
+class State(Enum):
+  COLLECT_spin_and_search_cone = 1
+  COLLECT_wander_and_search_cone = 2
+  COLLECT_approach_cone = 3
+  COLLECT_acquire_cone = 4
+  COLLECT_open_claw = 5
+  DELIVER_spin_and_search_target = 6
+  DELIVER_wander_and_search_target = 7
+  DELIVER_approach_target = 8
+  DELIVER_verify_target = 9
+  DELIVER_release_cone = 10
 
 class Driver():
   # Wait .05 sec between loops
   # This waits after the loop is run. This will not subtract the time it took to run loop() from the total wait time.
   def __init__(self, webserver_queue=None, looprate=0.05):
     self.arduino = Arduino()
-    self.navigation = Navigation()
+    self.navigation = Navigation(arduino)
+    self.state = State.COLLECT_spin_and_search_cone
     # Define constants
     self.looprate = looprate
-    # Variables updated from webserver:
+    # Variables updated from webserver
     self.webserver_queue = webserver_queue
-    #self.mode = Mode.locate
     self.mode = "auto"
     self.manual_direction = "stop"
+    # Variables used by states
+    self.start_time = None
 
   def start(self):
     self.stop = False
@@ -48,6 +62,54 @@ class Driver():
       return
 
     if (self.mode == "auto"):
+      if (self.state == COLLECT_spin_and_search_cone):
+        self.navigation.spin_clockwise()
+
+        if (self.start_time == None):
+          self.start_time = time.time()
+
+        if (time.time() - self.start_time >= constants.SPIN_TIME_SEC):
+          self.start_time = None
+          self.navigation.stop()
+          self.state = COLLECT_wander_and_search_cone
+        # TODO: Use signatures with pixy
+        elif (self.navigation.get_pixy_block_x_average(self.arduino.get_pixy_blocks()):
+          self.start_time = None
+          self.navigation.stop()
+          self.state = COLLECT_approach_cone
+      elif (self.state == COLLECT_wander_and_search_cone):
+        # TODO: Figure out how to best wander
+        self.navigation.forward()
+
+        if (self.start_time == None):
+          self.start_time = time.time()
+
+        if (time.time() - self.start_time >= constants.WANDER_TIME_SEC):
+          self.start_time = None
+          self.navigation.stop()
+          self.state = COLLECT_spin_and_search_cone
+        # TODO: Use signatures with pixy
+        elif (self.navigation.get_pixy_block_x_average(self.arduino.get_pixy_blocks()):
+          self.start_time = None
+          self.navigation.stop()
+          self.state = COLLECT_approach_cone
+      elif (self.state == COLLECT_approach_cone):
+        # TODO
+      elif (self.state == COLLECT_acquire_cone):
+        # TODO
+      elif (self.state == COLLECT_open_claw):
+        # TODO
+      elif (self.state == DELIVER_spin_and_search_target):
+        # TODO
+      elif (self.state == DELIVER_wander_and_search_target):
+        # TODO
+      elif (self.state == DELIVER_approach_target):
+        # TODO
+      elif (self.state == DELIVER_verify_target):
+        # TODO
+      elif (self.state == DELIVER_release_cone):
+        # TODO
+
       # Ping:
       # (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
 
@@ -65,8 +127,6 @@ class Driver():
       # self.arduino.set_motors(left_motor, right_motor)
       # self.arduino.set_servo(servo)
 
-      self.arduino.getA0()
-
     #   (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
 
     #   ping = self.arduino.get_ping()
@@ -83,24 +143,24 @@ class Driver():
     #   print("L: " + str(left_motor) + " R: " + str(right_motor))
     #   self.arduino.set_motors(left_motor, right_motor)
 
-    # elif (self.mode == "manual"):
-    #   # print("In manual mode")
-    #   if (self.manual_direction == "stop"):
-    #     (left_motor, right_motor) = (0.0, 0.0)
-    #   elif (self.manual_direction == "forward"):
-    #     (left_motor, right_motor) = (0.2, 0.2)
-    #   elif (self.manual_direction == "backward"):
-    #     (left_motor, right_motor) = (-0.2, -0.2)
-    #   elif (self.manual_direction == "right"):
-    #     (left_motor, right_motor) = (0.2, 0.0)
-    #   elif (self.manual_direction == "left"):
-    #     (left_motor, right_motor) = (0.0, 0.2)
+    elif (self.mode == "manual"):
+      # print("In manual mode")
+      if (self.manual_direction == "stop"):
+        (left_motor, right_motor) = (0.0, 0.0)
+      elif (self.manual_direction == "forward"):
+        (left_motor, right_motor) = (0.2, 0.2)
+      elif (self.manual_direction == "backward"):
+        (left_motor, right_motor) = (-0.2, -0.2)
+      elif (self.manual_direction == "right"):
+        (left_motor, right_motor) = (0.2, 0.0)
+      elif (self.manual_direction == "left"):
+        (left_motor, right_motor) = (0.0, 0.2)
 
-    #   print("L: " + str(left_motor) + " R: " + str(right_motor))
-    #   self.arduino.set_motors(left_motor, right_motor)
+      print("L: " + str(left_motor) + " R: " + str(right_motor))
+      self.arduino.set_motors(left_motor, right_motor)
 
 
-    # # Loop again after delay
+    # Loop again after delay
     if (self.stop):
       self.shutdown()
     else:

@@ -4,11 +4,25 @@
 Control Navigation Features
 """
 
+import constants
 from pixy import Pixy
 
 class Navigation():
-  def __init__(self):
+  def __init__(self, arduino):
     self.pixy = Pixy()
+    self.arduino = arduino
+
+  def stop(self):
+    self.arduino.set_motors(0, 0)
+
+  def forward(self):
+    self.arduino.set_motors(FORWARD_SPEED_LEFT, FORWARD_SPEED_RIGHT)
+
+  def spin_clockwise(self):
+    self.arduino.set_motors(SPIN_SPEED_LEFT, -1 * SPIN_SPEED_RIGHT)
+
+  def spin_counterclockwise(self):
+    self.arduino.set_motors(-1 * SPIN_SPEED_LEFT, SPIN_SPEED_RIGHT)
 
   def with_pixy(self, pixy_blocks):
     block = self.pixy.get_pixy_block(pixy_blocks)

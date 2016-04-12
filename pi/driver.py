@@ -65,7 +65,7 @@ class Driver():
       # self.arduino.set_motors(left_motor, right_motor)
       # self.arduino.set_servo(servo)
 
-      self.arduino.getA0()
+      self.arduino.print_ir()
 
     #   (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
 
@@ -99,12 +99,12 @@ class Driver():
     #   print("L: " + str(left_motor) + " R: " + str(right_motor))
     #   self.arduino.set_motors(left_motor, right_motor)
 
-
-    # # Loop again after delay
-    if (self.stop):
+    elif (self.mode == "kill"):
       self.shutdown()
-    else:
-      sc.enter(self.looprate, 1, self.loop, (sc,))
+      sys.exit(0)
+
+    # Loop again after delay
+    sc.enter(self.looprate, 1, self.loop, (sc,))
 
   def process_message(self, message):
     if (message == "stop"):
@@ -119,6 +119,8 @@ class Driver():
       self.mode = "auto"
     elif (message == "manual"):
       self.mode = "manual"
+    elif (message == "kill"):
+      self.mode = "kill"
 
     # Manual Directions
     elif (message == "manual_forward"):

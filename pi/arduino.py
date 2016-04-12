@@ -23,7 +23,10 @@ class Arduino():
 
   _SERVO = 9
 
-  _IR = 0
+  # Analog Pins
+  _IR_LEFT = 0
+  _IR_MID = 1
+  _IR_RIGHT = 2
 
 
   def __init__(self):
@@ -39,8 +42,12 @@ class Arduino():
     self.board.set_pin_mode(self._MOTOR2_DIR_A, Constants.OUTPUT)
     self.board.set_pin_mode(self._MOTOR2_DIR_B, Constants.OUTPUT)
 
-    self.board.set_pin_mode(self._IR, Constants.INPUT)
-    self.board.enable_analog_reporting(self._IR)
+    self.board.set_pin_mode(self._IR_LEFT, Constants.INPUT)
+    self.board.enable_analog_reporting(self._IR_LEFT)
+    self.board.set_pin_mode(self._IR_MID, Constants.INPUT)
+    self.board.enable_analog_reporting(self._IR_MID)
+    self.board.set_pin_mode(self._IR_RIGHT, Constants.INPUT)
+    self.board.enable_analog_reporting(self._IR_RIGHT)
 
     self.board.sonar_config(self._PING, self._PING)
 
@@ -97,8 +104,19 @@ class Arduino():
 
     return blocks
 
-  def getA0(self):
-    print(self.board.analog_read(0))
+  def print_ir(self):
+    print(str(self.board.analog_read(self._IR_LEFT)) + "  |  " +
+      str(self.board.analog_read(self._IR_MID)) + "  |  " +
+      str(self.board.analog_read(self._IR_RIGHT)))
+
+  def get_ir_left(self):
+    return self.board.analog_read(self._IR_LEFT)
+
+  def get_ir_mid(self):
+    return self.board.analog_read(self._IR_MID)
+
+  def get_ir_right(self):
+    return self.board.analog_read(self._IR_RIGHT)
 
   def shutdown(self):
     # Reset the board and exit

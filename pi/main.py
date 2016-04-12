@@ -70,7 +70,7 @@ def manual_stop():
 #   q.append("manual")
 
 def shutdown(signal=None, frame=None):
-  q.append("stop")
+  q.append("kill")
   sys.exit(0)
 
 if __name__ == "__main__":

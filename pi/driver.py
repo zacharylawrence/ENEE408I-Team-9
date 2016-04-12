@@ -30,7 +30,7 @@ class Driver():
   # This waits after the loop is run. This will not subtract the time it took to run loop() from the total wait time.
   def __init__(self, webserver_queue=None, looprate=0.05):
     self.arduino = Arduino()
-    self.navigation = Navigation(arduino)
+    self.navigation = Navigation(self.arduino)
     self.state = State.COLLECT_spin_and_search_cone
     # Define constants
     self.looprate = looprate
@@ -62,67 +62,64 @@ class Driver():
       return
 
     if (self.mode == "auto"):
-      if (self.state == COLLECT_spin_and_search_cone):
-        self.navigation.spin_clockwise()
-
+      if (self.state == State.COLLECT_spin_and_search_cone):
         if (self.start_time == None):
           self.start_time = time.time()
 
-        if (time.time() - self.start_time >= constants.SPIN_TIME_SEC):
+        if (time.time() - self.start_time >= constants.SPIN_TIME):
           self.start_time = None
           self.navigation.stop()
-          self.state = COLLECT_wander_and_search_cone
+          self.change_state(State.COLLECT_wander_and_search_cone)
         # TODO: Use signatures with pixy
-        elif (self.navigation.get_pixy_block_x_average(self.arduino.get_pixy_blocks()):
-          self.start_time = None
-          self.navigation.stop()
-          self.state = COLLECT_approach_cone
-      elif (self.state == COLLECT_wander_and_search_cone):
-        # TODO: Figure out how to best wander
-        self.navigation.forward()
-
+        else:
+          status = self.navigation.spin_and_search_cone()
+          if (status == "CONE_FOUND"):
+            self.start_time = None
+            self.change_state(State.COLLECT_approach_cone)
+      elif (self.state == State.COLLECT_wander_and_search_cone):
         if (self.start_time == None):
           self.start_time = time.time()
 
-        if (time.time() - self.start_time >= constants.WANDER_TIME_SEC):
+        if (time.time() - self.start_time >= constants.WANDER_TIME):
           self.start_time = None
           self.navigation.stop()
-          self.state = COLLECT_spin_and_search_cone
+          self.change_state(State.COLLECT_spin_and_search_cone)
         # TODO: Use signatures with pixy
-        elif (self.navigation.get_pixy_block_x_average(self.arduino.get_pixy_blocks()):
-          self.start_time = None
-          self.navigation.stop()
-          self.state = COLLECT_approach_cone
-      elif (self.state == COLLECT_approach_cone):
+        else:
+          status = self.navigation.wander_and_search_cone()
+          if (status == "CONE_FOUND"):
+            self.start_time = None
+            self.change_state(State.COLLECT_approach_cone)
+      elif (self.state == State.COLLECT_approach_cone):
         status = self.navigation.approach()
         if (status == "LOST_CONE"):
-          self.state = COLLECT_spin_and_search_cone
+          self.change_state(State.COLLECT_spin_and_search_cone)
         elif (status == "CONE_IN_RANGE"):
-          self.state = COLLECT_acquire_cone
-      elif (self.state == COLLECT_acquire_cone):
+          self.change_state(State.COLLECT_acquire_cone)
+      elif (self.state == State.COLLECT_acquire_cone):
         self.arduino.close_claw()
 
         ping = self.arduino.get_ping()
-        if (ping <= PING_CONE_THRESHOLD and ping != 0):
-          self.state = DELIVER_spin_and_search_target
+        if (ping <= constants.PING_CONE_THRESHOLD and ping != 0):
+          self.change_state(State.DELIVER_spin_and_search_target)
         else:
-          self.state = COLLECT_open_claw
-      elif (self.state == COLLECT_open_claw):
+          self.change_state(State.COLLECT_open_claw)
+      elif (self.state == State.COLLECT_open_claw):
         self.arduino.open_claw()
-        self.state = COLLECT_approach_cone
-      elif (self.state == DELIVER_spin_and_search_target):
+        self.change_state(State.COLLECT_approach_cone)
+      elif (self.state == State.DELIVER_spin_and_search_target):
         # TODO
         pass
-      elif (self.state == DELIVER_wander_and_search_target):
+      elif (self.state == State.DELIVER_wander_and_search_target):
         # TODO
         pass
-      elif (self.state == DELIVER_approach_target):
+      elif (self.state == State.DELIVER_approach_target):
         # TODO
         pass
-      elif (self.state == DELIVER_verify_target):
+      elif (self.state == State.DELIVER_verify_target):
         # TODO
         pass
-      elif (self.state == DELIVER_release_cone):
+      elif (self.state == State.DELIVER_release_cone):
         # TODO
         pass
 
@@ -148,6 +145,10 @@ class Driver():
 
     # Loop again after delay
     sc.enter(self.looprate, 1, self.loop, (sc,))
+
+  def change_state(self, new_state):
+    print("[State Change] " + str(self.state) + " -> " + str(new_state))
+    self.state = new_state
 
   def process_message(self, message):
     if (message == "stop"):
@@ -176,7 +177,6 @@ class Driver():
       self.manual_direction = "left"
     elif (message == "manual_stop"):
       self.manual_direction = "stop"
-
 
   def shutdown(self, signal=None, frame=None):
     self.arduino.shutdown()

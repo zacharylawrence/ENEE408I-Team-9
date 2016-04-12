@@ -58,6 +58,10 @@ class Arduino():
 
     self.board.servo_config(self._SERVO)
 
+    # Set default state
+    self.set_motors(0, 0)
+    self.open_claw()
+
   def set_motors(self, motor1, motor2):
     if (motor1 < -1 or motor1 > 1 or motor2 < -1 or motor2 > 1):
       raise ValueError("set_motor called with (motor1=" + str(motor1) + ") and (motor2=" + str(motor2) + ")")

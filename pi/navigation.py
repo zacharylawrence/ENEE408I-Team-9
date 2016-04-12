@@ -9,7 +9,8 @@ from pixy import Pixy
 
 class Navigation():
   def __init__(self, arduino):
-    self.pixy = Pixy()
+    self.pixy_cone = Pixy(constants.PIXY_CONE_SIGNATURE)
+    self.pixy_target = Pixy(constants.PIXY_TARGET_SIGNATURE)
     self.arduino = arduino
 
   def stop(self):
@@ -25,7 +26,7 @@ class Navigation():
     self.arduino.set_motors(-1 * constants.SPIN_SPEED_LEFT, constants.SPIN_SPEED_RIGHT)
 
   def spin_and_search_cone(self):
-    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    block_x = self.pixy_cone.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
 
     if (block_x != None):
       print("Cone Found")
@@ -36,7 +37,7 @@ class Navigation():
       return None
 
   def wander_and_search_cone(self):
-    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    block_x = self.pixy_cone.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
 
     if (block_x != None):
       print("Cone Found")
@@ -47,8 +48,8 @@ class Navigation():
       return None
 
   # Returns "CONE_IN_RANGE" if cone in range, "LOST_CONE" if lose cone, otherwise None
-  def approach(self):
-    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+  def approach_cone(self):
+    block_x = self.pixy_cone.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
     ping = self.arduino.get_ping()
 
     if (block_x == None):
@@ -60,6 +61,57 @@ class Navigation():
       print("Cone in Range")
       self.stop()
       return "CONE_IN_RANGE"
+
+    print("x:" + str(block_x))
+    if (block_x < constants.PIXY_BOUNDARY_LEFT):
+      print("Go left")
+      self.spin_clockwise()
+      return None
+    elif(block_x > constants.PIXY_BOUNDARY_RIGHT):
+      print("Go right")
+      self.spin_clockwise()
+      return None
+    else:
+      print("Go forward")
+      self.forward()
+      return None
+
+  def spin_and_search_target(self):
+    block_x = self.pixy_target.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+
+    if (block_x != None):
+      print("Target Found")
+      self.stop()
+      return "TARGET_FOUND"
+    else:
+      self.spin_clockwise()
+      return None
+
+  def wander_and_search_target(self):
+    block_x = self.pixy_target.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+
+    if (block_x != None):
+      print("Target Found")
+      self.stop()
+      return "TARGET_FOUND"
+    else:
+      self.spin_counterclockwise()
+      return None
+
+  # Returns "TARGET_IN_RANGE" if target in range, "LOST_TARGET" if lose target, otherwise None
+  def approach_target(self):
+    block_x = self.pixy_target.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    ping = self.arduino.get_ping()
+
+    if (block_x == None):
+      print("Lost Target")
+      self.stop()
+      return "LOST_TARGET"
+
+    if (ping <= constants.PING_CONE_THRESHOLD and ping != 0):
+      print("Target in Range")
+      self.stop()
+      return "TARGET_IN_RANGE"
 
     print("x:" + str(block_x))
     if (block_x < constants.PIXY_BOUNDARY_LEFT):

@@ -62,6 +62,9 @@ class Driver():
       return
 
     if (self.mode == "auto"):
+
+      # ---- Collect Spin and Search Cone ----
+
       if (self.state == State.COLLECT_spin_and_search_cone):
         if (self.start_time == None):
           self.start_time = time.time()
@@ -76,6 +79,9 @@ class Driver():
           if (status == "CONE_FOUND"):
             self.start_time = None
             self.change_state(State.COLLECT_approach_cone)
+
+      # ---- Collect Wander and Search ----
+
       elif (self.state == State.COLLECT_wander_and_search_cone):
         if (self.start_time == None):
           self.start_time = time.time()
@@ -90,12 +96,18 @@ class Driver():
           if (status == "CONE_FOUND"):
             self.start_time = None
             self.change_state(State.COLLECT_approach_cone)
+
+      # ---- Collect Approach Cone ----
+
       elif (self.state == State.COLLECT_approach_cone):
-        status = self.navigation.approach()
+        status = self.navigation.approach_cone()
         if (status == "LOST_CONE"):
           self.change_state(State.COLLECT_spin_and_search_cone)
         elif (status == "CONE_IN_RANGE"):
           self.change_state(State.COLLECT_acquire_cone)
+
+      # ---- Collect Acquire Cone ----
+
       elif (self.state == State.COLLECT_acquire_cone):
         self.arduino.close_claw()
 
@@ -104,21 +116,64 @@ class Driver():
           self.change_state(State.DELIVER_spin_and_search_target)
         else:
           self.change_state(State.COLLECT_open_claw)
+
+      # ---- Collect Open Claw ----
+
       elif (self.state == State.COLLECT_open_claw):
         self.arduino.open_claw()
         self.change_state(State.COLLECT_approach_cone)
+
+      # ---- Deliver Spin and Search Target ----
+
       elif (self.state == State.DELIVER_spin_and_search_target):
-        # TODO
-        pass
+        if (self.start_time == None):
+          self.start_time = time.time()
+
+        if (time.time() - self.start_time >= constants.SPIN_TIME):
+          self.start_time = None
+          self.navigation.stop()
+          self.change_state(State.DELIVER_wander_and_search_target)
+        # TODO: Use signatures with pixy
+        else:
+          status = self.navigation.spin_and_search_target()
+          if (status == "TARGET_FOUND"):
+            self.start_time = None
+            self.change_state(State.DELIVER_approach_target)
+
+      # ---- Deliver Wander and Search Target ----
+
       elif (self.state == State.DELIVER_wander_and_search_target):
-        # TODO
-        pass
+        if (self.start_time == None):
+          self.start_time = time.time()
+
+        if (time.time() - self.start_time >= constants.WANDER_TIME):
+          self.start_time = None
+          self.navigation.stop()
+          self.change_state(State.DELIVER_spin_and_search_target)
+        # TODO: Use signatures with pixy
+        else:
+          status = self.navigation.wander_and_search_target()
+          if (status == "TARGET_FOUND"):
+            self.start_time = None
+            self.change_state(State.DELIVER_approach_target)
+
+      # ---- Deliver Approach Target ----
+
       elif (self.state == State.DELIVER_approach_target):
-        # TODO
-        pass
+        status = self.navigation.approach_target()
+        if (status == "LOST_CONE"):
+          self.change_state(State.COLLECT_spin_and_search_cone)
+        elif (status == "CONE_IN_RANGE"):
+          self.change_state(State.COLLECT_acquire_cone)
+
+      # ---- Deliver Verify Target ----
+
       elif (self.state == State.DELIVER_verify_target):
         # TODO
         pass
+
+      # ---- Deliver Release Cone ----
+
       elif (self.state == State.DELIVER_release_cone):
         # TODO
         pass

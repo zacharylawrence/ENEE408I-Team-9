@@ -94,56 +94,37 @@ class Driver():
           self.navigation.stop()
           self.state = COLLECT_approach_cone
       elif (self.state == COLLECT_approach_cone):
-        # TODO
+        status = self.navigation.approach()
+        if (status == "LOST_CONE"):
+          self.state = COLLECT_spin_and_search_cone
+        elif (status == "CONE_IN_RANGE"):
+          self.state = COLLECT_acquire_cone
       elif (self.state == COLLECT_acquire_cone):
-        # TODO
+        self.arduino.close_claw()
+
+        ping = self.arduino.get_ping()
+        if (ping <= PING_CONE_THRESHOLD and ping != 0):
+          self.state = DELIVER_spin_and_search_target
+        else:
+          self.state = COLLECT_open_claw
       elif (self.state == COLLECT_open_claw):
-        # TODO
+        self.arduino.open_claw()
+        self.state = COLLECT_approach_cone
       elif (self.state == DELIVER_spin_and_search_target):
         # TODO
+        pass
       elif (self.state == DELIVER_wander_and_search_target):
         # TODO
+        pass
       elif (self.state == DELIVER_approach_target):
         # TODO
+        pass
       elif (self.state == DELIVER_verify_target):
         # TODO
+        pass
       elif (self.state == DELIVER_release_cone):
         # TODO
-
-      # Ping:
-      # (left_motor, right_motor) = self.navigation.hold_ping(self.arduino.get_ping())
-
-      # Pixy:
-      # (left_motor, right_motor) = self.navigation.with_pixy(self.arduino.get_pixy_blocks())
-
-      # print("L: " + str(left_motor) + " R: " + str(right_motor))
-      # self.arduino.set_motors(left_motor, right_motor)
-      # print("\n")
-
-      # Pixy + Ping:
-      # print("ping: " + str(self.arduino.get_ping()))
-      # (left_motor, right_motor) = self.navigation.with_pixy_average_and_ping(self.arduino.get_pixy_blocks(), self.arduino.get_ping())
-      # print("L: " + str(left_motor) + " R: " + str(right_motor))
-      # self.arduino.set_motors(left_motor, right_motor)
-      # self.arduino.set_servo(servo)
-
-      self.arduino.print_ir()
-
-    #   (left_motor, right_motor) = self.navigation.with_pixy_average(self.arduino.get_pixy_blocks())
-
-    #   ping = self.arduino.get_ping()
-    #   if (ping != None):
-    #     if (ping != 0 and ping <= 5):
-    #       self.arduino.close_claw()
-    #       self.arduino.board.sleep(2)
-    #       left_motor = -0.2
-    #       right_motor = -0.2
-    #     else:
-    #       self.arduino.open_claw()
-    #   # print(ping)
-
-    #   print("L: " + str(left_motor) + " R: " + str(right_motor))
-    #   self.arduino.set_motors(left_motor, right_motor)
+        pass
 
     elif (self.mode == "manual"):
       # print("In manual mode")

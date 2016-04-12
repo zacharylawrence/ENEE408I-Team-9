@@ -7,6 +7,8 @@ Control All Arduino Functions
 from pymata_aio.pymata3 import PyMata3
 from pymata_aio.constants import Constants
 
+import constants
+
 class Arduino():
   # Define Pin Constants
   # SPI (for pixy) uses pins 10-13
@@ -79,9 +81,11 @@ class Arduino():
 
   def close_claw(self):
     self.board.analog_write(self._SERVO, 50)
+    self.board.sleep(constants.CLOSE_CLAW_PAUSE)
 
   def open_claw(self):
     self.board.analog_write(self._SERVO, 150)
+    self.board.sleep(constants.OPEN_CLAW_PAUSE)
 
   # Get the ping sensor's distance in cm
   def get_ping(self):

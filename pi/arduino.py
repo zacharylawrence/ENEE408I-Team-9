@@ -84,7 +84,7 @@ class Arduino():
     self.board.analog_write(self._SERVO, servo)
 
   def close_claw(self):
-    self.board.analog_write(self._SERVO, 50)
+    self.board.analog_write(self._SERVO, 100) #50
     self.board.sleep(constants.CLOSE_CLAW_PAUSE)
 
   def open_claw(self):
@@ -98,6 +98,7 @@ class Arduino():
   # Returns the value from the pixy camera
   def get_pixy_blocks(self):
     blocks = self.board.pixy_get_blocks()
+    print(blocks)
 
     if len(blocks) > 0 and not "signature" in blocks[0]:
         print("Malformed pixy block!!")

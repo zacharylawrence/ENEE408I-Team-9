@@ -24,7 +24,7 @@ class Pixy():
       block = pixy_blocks[block_index]
       if (block["signature"] == self.signature):
         size = block["width"] * block["height"]
-        if (size > max_block_size):
+        if (size >= max_block_size):
           max_block_index = block_index
           max_block_size = size
 

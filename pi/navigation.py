@@ -65,7 +65,7 @@ class Navigation():
     print("x:" + str(block_x))
     if (block_x < constants.PIXY_BOUNDARY_LEFT):
       print("Go left")
-      self.spin_clockwise()
+      self.spin_counterclockwise()
       return None
     elif(block_x > constants.PIXY_BOUNDARY_RIGHT):
       print("Go right")
@@ -116,7 +116,7 @@ class Navigation():
     print("x:" + str(block_x))
     if (block_x < constants.PIXY_BOUNDARY_LEFT):
       print("Go left")
-      self.spin_clockwise()
+      self.spin_counterclockwise()
       return None
     elif(block_x > constants.PIXY_BOUNDARY_RIGHT):
       print("Go right")

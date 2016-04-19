@@ -84,7 +84,7 @@ class Arduino():
     self.board.analog_write(self._SERVO, servo)
 
   def close_claw(self):
-    self.board.analog_write(self._SERVO, 100) #50
+    self.board.analog_write(self._SERVO, 75)  # Used to be 50
     self.board.sleep(constants.CLOSE_CLAW_PAUSE)
 
   def open_claw(self):
@@ -116,7 +116,8 @@ class Arduino():
   def print_ir(self):
     print(str(self.board.analog_read(self._IR_LEFT)) + "  |  " +
       str(self.board.analog_read(self._IR_MID)) + "  |  " +
-      str(self.board.analog_read(self._IR_RIGHT)))
+      str(self.board.analog_read(self._IR_RIGHT)) + "  |  " +
+      str(self.get_ping()))
 
   def get_ir_left(self):
     return self.board.analog_read(self._IR_LEFT)
@@ -126,6 +127,11 @@ class Arduino():
 
   def get_ir_right(self):
     return self.board.analog_read(self._IR_RIGHT)
+
+  def ir_wall(self):
+    return (self.get_ir_left() >= constants.IR_WALL_THRESHOLD or
+      self.get_ping() <= constants.PING_WALL_THRESHOLD or
+      self.get_ir_right() >= constants.IR_WALL_THRESHOLD)
 
   def shutdown(self):
     # Reset the board and exit

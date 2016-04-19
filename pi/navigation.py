@@ -9,8 +9,7 @@ from pixy import Pixy
 
 class Navigation():
   def __init__(self, arduino):
-    self.pixy_cone = Pixy(constants.PIXY_CONE_SIGNATURE)
-    self.pixy_target = Pixy(constants.PIXY_TARGET_SIGNATURE)
+    self.pixy = Pixy()
     self.arduino = arduino
 
   def stop(self):
@@ -25,31 +24,64 @@ class Navigation():
   def spin_counterclockwise(self):
     self.arduino.set_motors(-1 * constants.SPIN_SPEED_LEFT, constants.SPIN_SPEED_RIGHT)
 
+  def spin_clockwise_fast(self):
+    self.arduino.set_motors(constants.SPIN_SPEED_LEFT_FAST, -1 * constants.SPIN_SPEED_RIGHT_FAST)
+
+  def spin_counterclockwise_fast(self):
+    self.arduino.set_motors(-1 * constants.SPIN_SPEED_LEFT_FAST, constants.SPIN_SPEED_RIGHT_FAST)
+
   def spin_and_search_cone(self):
-    block_x = self.pixy_cone.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    if (self.pixy.signature_name != "cone"):
+      self.pixy.set_signature_cone()
+
+    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
 
     if (block_x != None):
       print("Cone Found")
       self.stop()
       return "CONE_FOUND"
     else:
-      self.spin_clockwise()
+      self.spin_clockwise_fast()
       return None
 
-  def wander_and_search_cone(self):
-    block_x = self.pixy_cone.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+  # def wander_and_search_cone(self):
+  #   if (self.pixy.signature_name != "cone"):
+  #     self.pixy.set_signature_cone()
 
+  #   block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+
+  #   if (block_x != None):
+  #     print("Cone Found")
+  #     self.stop()
+  #     return "CONE_FOUND"
+  #   else:
+  #     self.spin_counterclockwise()
+  #     return None
+
+  def wander_and_search_cone(self):
+    if (self.pixy.signature_name != "cone"):
+      self.pixy.set_signature_cone()
+
+    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    self.arduino.print_ir()
     if (block_x != None):
       print("Cone Found")
       self.stop()
       return "CONE_FOUND"
     else:
-      self.spin_counterclockwise()
+      if (self.arduino.ir_wall()):
+        print("Wandered into wall! Spinning...")
+        self.spin_clockwise_fast()
+      else:
+        self.forward()
       return None
 
   # Returns "CONE_IN_RANGE" if cone in range, "LOST_CONE" if lose cone, otherwise None
   def approach_cone(self):
-    block_x = self.pixy_cone.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    if (self.pixy.signature_name != "cone"):
+      self.pixy.set_signature_cone()
+
+    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
     ping = self.arduino.get_ping()
 
     if (block_x == None):
@@ -77,7 +109,10 @@ class Navigation():
       return None
 
   def spin_and_search_target(self):
-    block_x = self.pixy_target.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    if (self.pixy.signature_name != "target"):
+      self.pixy.set_signature_target()
+
+    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
 
     if (block_x != None):
       print("Target Found")
@@ -88,7 +123,10 @@ class Navigation():
       return None
 
   def wander_and_search_target(self):
-    block_x = self.pixy_target.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    if (self.pixy.signature_name != "target"):
+      self.pixy.set_signature_target()
+
+    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
 
     if (block_x != None):
       print("Target Found")
@@ -100,7 +138,10 @@ class Navigation():
 
   # Returns "TARGET_IN_RANGE" if target in range, "LOST_TARGET" if lose target, otherwise None
   def approach_target(self):
-    block_x = self.pixy_target.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
+    if (self.pixy.signature_name != "target"):
+      self.pixy.set_signature_target()
+
+    block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
     ping = self.arduino.get_ping()
 
     if (block_x == None):

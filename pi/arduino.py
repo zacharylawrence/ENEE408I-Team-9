@@ -133,6 +133,11 @@ class Arduino():
       self.get_ping() <= constants.PING_WALL_THRESHOLD or
       self.get_ir_right() >= constants.IR_WALL_THRESHOLD)
 
+  def ir_wall_target(self):
+    return (self.get_ir_left() >= constants.IR_WALL_THRESHOLD or
+      self.get_ir_mid() >= constants.IR_WALL_THRESHOLD or
+      self.get_ir_right() >= constants.IR_WALL_THRESHOLD)
+
   def shutdown(self):
     # Reset the board and exit
     self.board.shutdown()

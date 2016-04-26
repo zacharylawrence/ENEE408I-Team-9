@@ -161,22 +161,23 @@ class Driver():
 
       elif (self.state == State.DELIVER_approach_target):
         status = self.navigation.approach_target()
-        if (status == "LOST_CONE"):
-          self.change_state(State.COLLECT_wander_and_search_target)
-        elif (status == "CONE_IN_RANGE"):
-          self.change_state(State.COLLECT_acquire_cone)
+        if (status == "LOST_TARGET"):
+          self.change_state(State.DELIVER_wander_and_search_target)
+        elif (status == "TARGET_IN_RANGE"):
+          self.change_state(State.DELIVER_verify_target)
 
       # ---- Deliver Verify Target ----
 
       elif (self.state == State.DELIVER_verify_target):
-        # TODO
-        pass
+        self.change_state(State.DELIVER_release_cone)
 
       # ---- Deliver Release Cone ----
 
       elif (self.state == State.DELIVER_release_cone):
-        # TODO
-        pass
+        self.arduino.open_claw()
+        self.arduino.board.sleep(5)
+        print("Starting over...")
+        self.change_state(State.COLLECT_spin_and_search_cone)
 
     elif (self.mode == "manual"):
       # print("In manual mode")

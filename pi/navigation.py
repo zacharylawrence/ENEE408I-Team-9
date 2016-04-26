@@ -69,6 +69,7 @@ class Navigation():
 
     block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
     ping = self.arduino.get_ping()
+    print(ping)
 
     if (block_x == None):
       print("Lost Cone")
@@ -113,13 +114,17 @@ class Navigation():
       self.pixy.set_signature_target()
 
     block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
-
+    self.arduino.print_ir()
     if (block_x != None):
       print("Target Found")
       self.stop()
       return "TARGET_FOUND"
     else:
-      self.spin_counterclockwise()
+      if (self.arduino.ir_wall_target()):
+        print("Wandered into wall! Spinning...")
+        self.spin_clockwise_fast()
+      else:
+        self.forward()
       return None
 
   # Returns "TARGET_IN_RANGE" if target in range, "LOST_TARGET" if lose target, otherwise None
@@ -129,13 +134,15 @@ class Navigation():
 
     block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
     ping = self.arduino.get_ping()
+    ir_mid = self.arduino.get_ir_mid()
 
     if (block_x == None):
       print("Lost Target")
       self.stop()
       return "LOST_TARGET"
 
-    if (ping <= constants.PING_CONE_THRESHOLD and ping != 0):
+    # if (ping <= constants.PING_TARGET_THRESHOLD and ping != 0):
+    if (ir_mid >= constants.IR_TARGET_THRESHOLD):
       print("Target in Range")
       self.stop()
       return "TARGET_IN_RANGE"

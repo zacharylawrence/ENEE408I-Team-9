@@ -102,7 +102,7 @@ class Driver():
       elif (self.state == State.COLLECT_approach_cone):
         status = self.navigation.approach_cone()
         if (status == "LOST_CONE"):
-          self.change_state(State.COLLECT_spin_and_search_cone)
+          self.change_state(State.COLLECT_wander_and_search_cone)
         elif (status == "CONE_IN_RANGE"):
           self.change_state(State.COLLECT_acquire_cone)
 
@@ -162,7 +162,7 @@ class Driver():
       elif (self.state == State.DELIVER_approach_target):
         status = self.navigation.approach_target()
         if (status == "LOST_CONE"):
-          self.change_state(State.COLLECT_spin_and_search_cone)
+          self.change_state(State.COLLECT_wander_and_search_target)
         elif (status == "CONE_IN_RANGE"):
           self.change_state(State.COLLECT_acquire_cone)
 

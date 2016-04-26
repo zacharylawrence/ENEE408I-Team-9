@@ -44,20 +44,6 @@ class Navigation():
       self.spin_clockwise_fast()
       return None
 
-  # def wander_and_search_cone(self):
-  #   if (self.pixy.signature_name != "cone"):
-  #     self.pixy.set_signature_cone()
-
-  #   block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
-
-  #   if (block_x != None):
-  #     print("Cone Found")
-  #     self.stop()
-  #     return "CONE_FOUND"
-  #   else:
-  #     self.spin_counterclockwise()
-  #     return None
-
   def wander_and_search_cone(self):
     if (self.pixy.signature_name != "cone"):
       self.pixy.set_signature_cone()

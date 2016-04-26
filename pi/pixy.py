@@ -21,12 +21,12 @@ class Pixy():
 
   def set_signature_cone(self):
     self.blocks_queue = deque()
-    self.signature = [constants.PIXY_CONE_SIGNATURE_1, 2]
+    self.signature = constants.PIXY_CONE_SIGNATURE
     self.signature_name = "cone"
 
   def set_signature_target(self):
     self.blocks_queue = deque()
-    self.signature = [constants.PIXY_TARGET_SIGNATURE_1]
+    self.signature = constants.PIXY_TARGET_SIGNATURE
     self.signature_name = "target"
 
   # Gets the pixy block with the largest size in the frame

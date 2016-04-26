@@ -178,7 +178,7 @@ class Driver():
         self.arduino.board.sleep(1)
 
         self.navigation.reverse()
-        self.arduino.board.sleep(5)
+        self.arduino.board.sleep(3)
 
         self.navigation.spin_clockwise()
         self.arduino.board.sleep(3)

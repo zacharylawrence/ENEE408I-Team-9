@@ -72,7 +72,6 @@ class Navigation():
 
     block_x = self.pixy.get_pixy_block_x_average(self.arduino.get_pixy_blocks())
     ping = self.arduino.get_ping()
-    print(ping)
 
     if (block_x == None):
       print("Lost Cone")

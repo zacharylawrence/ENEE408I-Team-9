@@ -28,7 +28,7 @@ class State(Enum):
 class Driver():
   # Wait .05 sec between loops
   # This waits after the loop is run. This will not subtract the time it took to run loop() from the total wait time.
-  def __init__(self, webserver_queue=None, looprate=0.05):
+  def __init__(self, webserver_queue=None, looprate=0.2):
     self.arduino = Arduino()
     self.navigation = Navigation(self.arduino)
     self.state = State.COLLECT_spin_and_search_cone
@@ -175,7 +175,14 @@ class Driver():
 
       elif (self.state == State.DELIVER_release_cone):
         self.arduino.open_claw()
+        self.arduino.board.sleep(1)
+
+        self.navigation.reverse()
         self.arduino.board.sleep(5)
+
+        self.navigation.spin_clockwise()
+        self.arduino.board.sleep(3)
+
         print("Starting over...")
         self.change_state(State.COLLECT_spin_and_search_cone)
 

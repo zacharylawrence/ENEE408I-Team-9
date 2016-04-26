@@ -33,7 +33,7 @@ class Arduino():
 
   def __init__(self):
     # Instantiate the pymata_core API
-    self.board = PyMata3()
+    self.board = PyMata3(sleep_tune=0)
 
     # Set the pin modes
     self.board.set_pin_mode(self._MOTOR1, Constants.PWM)

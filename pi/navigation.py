@@ -18,6 +18,9 @@ class Navigation():
   def forward(self):
     self.arduino.set_motors(constants.FORWARD_SPEED_LEFT, constants.FORWARD_SPEED_RIGHT)
 
+  def reverse(self):
+    self.arduino.set_motors(-1 * constants.FORWARD_SPEED_LEFT, -1 * constants.FORWARD_SPEED_RIGHT)
+
   def spin_clockwise(self):
     self.arduino.set_motors(constants.SPIN_SPEED_LEFT, -1 * constants.SPIN_SPEED_RIGHT)
 

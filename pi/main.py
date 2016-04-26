@@ -64,6 +64,14 @@ def manual_left():
 def manual_stop():
   q.append("manual_stop")
 
+@app.route("/manual/claw_open")
+def claw_open():
+  q.append("manual_claw_open")
+
+@app.route("/manual/claw_close")
+def claw_close():
+  q.append("manual_claw_close")
+
 # @app.route("/manual/servo")
 # def manual_servo():
 #   val = requests.args.get(val)

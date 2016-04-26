@@ -178,7 +178,7 @@ class Driver():
         self.arduino.board.sleep(1)
 
         self.navigation.reverse()
-        self.arduino.board.sleep(3)
+        self.arduino.board.sleep(1)
 
         self.navigation.spin_clockwise()
         self.arduino.board.sleep(3)
@@ -240,6 +240,10 @@ class Driver():
       self.manual_direction = "left"
     elif (message == "manual_stop"):
       self.manual_direction = "stop"
+    elif (message == "manual_claw_open"):
+      self.arduino.open_claw()
+    elif (message == "manual_claw_close"):
+      self.arduino.close_claw()
 
   def shutdown(self, signal=None, frame=None):
     self.arduino.shutdown()

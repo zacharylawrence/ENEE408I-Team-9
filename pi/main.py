@@ -76,11 +76,6 @@ def claw_open():
 def claw_close():
   q.append("manual_claw_close")
 
-# @app.route("/manual/servo")
-# def manual_servo():
-#   val = requests.args.get(val)
-#   q.append("manual")
-
 def shutdown(signal=None, frame=None):
   q.append("kill")
   sys.exit(0)

@@ -7,7 +7,7 @@ Drive the Robot
 import sched, time
 import signal, sys
 import time
-# import requests
+import requests
 from enum import Enum
 
 import constants
@@ -41,7 +41,7 @@ class Driver():
     self.manual_direction = "stop"
     # Variables used by states
     self.start_time = None
-    self.ready_to_deliver = True
+    self.ready_to_deliver = False
 
   def start(self):
     self.stop = False
@@ -115,11 +115,11 @@ class Driver():
 
         ping = self.arduino.get_ping()
         if (ping <= constants.PING_CONE_THRESHOLD and ping != 0):
-          # if (self.ready_to_deliver == True):
+          if (self.ready_to_deliver == True):
             self.change_state(State.DELIVER_spin_and_search_target)
-          #   self.ready_to_deliver == False
-          # else:
-          #   print("Waiting for inter-bot command to deliver...")
+            self.ready_to_deliver = False
+          else:
+            print("Waiting for inter-bot command to deliver...")
         else:
           self.change_state(State.COLLECT_open_claw)
 
@@ -192,7 +192,14 @@ class Driver():
         print("Starting over...")
         self.change_state(State.COLLECT_spin_and_search_cone)
 
-        # requests.get("http://example.com/foo/bar")
+        try:
+          endpoint = constants.GROUP10_IP + constants.GROUP10_ENDPOINT_READY
+          print("Hitting endpoint: " + endpoint)
+          requests.get(endpoint)
+        except:
+          print("Failed to hit Group10 Endpoint, trying again...")
+          print("Just kidding, I'm giving up!")
+
 
     elif (self.mode == "manual"):
       # print("In manual mode")

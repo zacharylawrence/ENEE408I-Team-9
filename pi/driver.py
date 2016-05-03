@@ -195,7 +195,7 @@ class Driver():
         try:
           endpoint = "http://" + constants.GROUP10_IP + constants.GROUP10_ENDPOINT_READY
           print("Hitting endpoint: " + endpoint)
-          requests.get(endpoint)
+          requests.get(endpoint, timeout=0.001)
         except:
           print("Failed to hit Group10 Endpoint, trying again...")
           print("Just kidding, I'm giving up!")

@@ -40,6 +40,7 @@ class Driver():
     self.manual_direction = "stop"
     # Variables used by states
     self.start_time = None
+    self.ready_to_deliver = True
 
   def start(self):
     self.stop = False
@@ -113,7 +114,11 @@ class Driver():
 
         ping = self.arduino.get_ping()
         if (ping <= constants.PING_CONE_THRESHOLD and ping != 0):
-          self.change_state(State.DELIVER_spin_and_search_target)
+          # if (self.ready_to_deliver == True):
+            self.change_state(State.DELIVER_spin_and_search_target)
+          #   self.ready_to_deliver == False
+          # else:
+          #   print("Waiting for inter-bot command to deliver...")
         else:
           self.change_state(State.COLLECT_open_claw)
 
@@ -228,6 +233,11 @@ class Driver():
       self.mode = "manual"
     elif (message == "kill"):
       self.mode = "kill"
+
+    # Inter-Bot commands
+    elif (message == "bot_ready_to_deliver"):
+      print("Received inter-bot communication: ready_to_deliver")
+      self.ready_to_deliver = True
 
     # Manual Directions
     elif (message == "manual_forward"):

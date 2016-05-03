@@ -53,7 +53,7 @@ class Arduino():
 
     self.board.sonar_config(self._PING, self._PING)
 
-    self.board.pixy_init()
+    self.board.pixy_init(max_blocks=constants.MAX_PIXY_BLOCKS)
     self.board.keep_alive(period=2)
 
     self.board.servo_config(self._SERVO)

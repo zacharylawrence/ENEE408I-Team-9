@@ -64,6 +64,10 @@ def manual_left():
 def manual_stop():
   q.append("manual_stop")
 
+@app.route("/bot/ready_to_deliver")
+def bot_ready_to_deliver():
+  q.append("bot_ready_to_deliver")
+
 @app.route("/manual/claw_open")
 def claw_open():
   q.append("manual_claw_open")

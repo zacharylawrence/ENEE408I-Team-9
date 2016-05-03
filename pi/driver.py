@@ -7,6 +7,7 @@ Drive the Robot
 import sched, time
 import signal, sys
 import time
+# import requests
 from enum import Enum
 
 import constants
@@ -190,6 +191,8 @@ class Driver():
 
         print("Starting over...")
         self.change_state(State.COLLECT_spin_and_search_cone)
+
+        # requests.get("http://example.com/foo/bar")
 
     elif (self.mode == "manual"):
       # print("In manual mode")

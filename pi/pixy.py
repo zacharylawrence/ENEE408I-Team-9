@@ -14,6 +14,7 @@ class Pixy():
     self.blocks_queue = deque()
     self.signature = signature
     self.signature_name = signature_name
+    self.cone_order = constants.PIXY_CONE_SIGNATURE
 
   def set_signature(self, signature):
     self.blocks_queue = deque()
@@ -21,7 +22,14 @@ class Pixy():
 
   def set_signature_cone(self):
     self.blocks_queue = deque()
-    self.signature = constants.PIXY_CONE_SIGNATURE
+
+    if (self.cone_order == 0):
+      print("Cone Order List Empty!")
+
+    sig = self.cone_order.pop(0)
+    print("Setting Cone Signature: " + str(sig))
+    self.signature = sig
+    # self.signature = constants.PIXY_CONE_SIGNATURE
     self.signature_name = "cone"
 
   def set_signature_target(self):

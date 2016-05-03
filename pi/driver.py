@@ -193,7 +193,7 @@ class Driver():
         self.change_state(State.COLLECT_spin_and_search_cone)
 
         try:
-          endpoint = constants.GROUP10_IP + constants.GROUP10_ENDPOINT_READY
+          endpoint = "http://" + constants.GROUP10_IP + constants.GROUP10_ENDPOINT_READY
           print("Hitting endpoint: " + endpoint)
           requests.get(endpoint)
         except:

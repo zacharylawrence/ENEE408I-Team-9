@@ -84,7 +84,7 @@ class Arduino():
     self.board.analog_write(self._SERVO, servo)
 
   def close_claw(self):
-    self.board.analog_write(self._SERVO, 75)  # Used to be 50
+    self.board.analog_write(self._SERVO, 100)  # Used to be 75
     self.board.sleep(constants.CLOSE_CLAW_PAUSE)
 
   def open_claw(self):

@@ -185,7 +185,7 @@ class Driver():
         self.arduino.board.sleep(1)
 
         self.navigation.reverse()
-        self.arduino.board.sleep(1)
+        self.arduino.board.sleep(2)
 
         self.navigation.spin_clockwise()
         self.arduino.board.sleep(3)
@@ -196,6 +196,7 @@ class Driver():
         try:
           endpoint = "http://" + constants.GROUP10_IP + constants.GROUP10_ENDPOINT_READY
           print("Hitting endpoint: " + endpoint)
+          # requests.get(endpoint, timeout=0.001)
           urlopen(endpoint)
         except:
           print("Failed to hit Group10 Endpoint, trying again...")
